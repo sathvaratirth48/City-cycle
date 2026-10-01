@@ -1,0 +1,541 @@
+{% extends 'userapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Carousel Start -->
+<div class="container-fluid p-0" style="margin-bottom: 90px;">
+    <div id="header-carousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="w-100" src="{% static 'userapp/img/carousel-1.jpg' %}" alt="Image">
+                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                    <div class="p-3" style="max-width: 900px;">
+                        <h4 class="text-white text-uppercase mb-md-3">Rent A Bike</h4>
+                        <h1 class="display-1 text-white mb-md-4">Ride Anywhere Anytime</h1>
+                        <a href="{% url 'start_booking' %}" class="btn btn-primary py-md-3 px-md-5 mt-2">Start Your
+                            Ride</a>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img class="w-100" src="{% static 'userapp/img/carousel-2.jpg' %}" alt="Image">
+                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                    <div class="p-3" style="max-width: 900px;">
+                        <h4 class="text-white text-uppercase mb-md-3">Rent A Bike</h4>
+                        <h1 class="display-1 text-white mb-md-4">Smart Affordable Bike Rentals Near You</h1>
+                        <a href="{% url 'start_booking' %}" class="btn btn-primary py-md-3 px-md-5 mt-2">Start Your
+                            Ride</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#header-carousel" data-slide="prev">
+            <div class="btn btn-dark" style="width: 45px; height: 45px;">
+                <span class="carousel-control-prev-icon mb-n2"></span>
+            </div>
+        </a>
+        <a class="carousel-control-next" href="#header-carousel" data-slide="next">
+            <div class="btn btn-dark" style="width: 45px; height: 45px;">
+                <span class="carousel-control-next-icon mb-n2"></span>
+            </div>
+        </a>
+    </div>
+</div>
+<!-- Carousel End -->
+
+
+<!-- About Start -->
+<div class="container-fluid py-5">
+    <div class="container pt-5 pb-3">
+        <h1 class="display-1 text-primary text-center">01</h1>
+        <h1 class="display-4 text-uppercase text-center mb-5">Welcome To <span class="text-primary">CityCycle –
+                Bike Sharing Platform</span></h1>
+        <div class="row justify-content-center">
+            <div class="col-lg-10 text-center">
+                <img class="w-75 mb-4" src="{% static 'userapp/img/about.png' %}" alt="">
+                <p>CityCycle is a modern and eco-friendly bike sharing platform designed to make urban travel smarter,
+                    faster, and more sustainable.
+                    Our system allows users to easily locate, unlock, and ride bicycles through a seamless digital
+                    experience.
+                    Whether commuting to work, exploring the city, or enjoying a leisure ride, CityCycle provides a
+                    convenient and affordable transportation solution.
+                    With multiple bike types including standard, mountain, and electric bikes, we ensure comfort and
+                    flexibility for every rider.
+                    Our smart docking stations and real-time tracking technology make rentals simple and secure. Join
+                    CityCycle today and experience a cleaner, greener way to move around your city.</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-lg-4 mb-2">
+                <div class="d-flex align-items-center bg-light p-4 mb-4" style="height: 150px;">
+                    <div class="d-flex align-items-center justify-content-center flex-shrink-0 bg-primary ml-n4 mr-4"
+                        style="width: 100px; height: 100px;">
+                        <i class="fa fa-2x fa-headset text-secondary"></i>
+                    </div>
+                    <h4 class="text-uppercase m-0">24/7 Bike Support</h4>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-2">
+                <div class="d-flex align-items-center bg-secondary p-4 mb-4" style="height: 150px;">
+                    <div class="d-flex align-items-center justify-content-center flex-shrink-0 bg-primary ml-n4 mr-4"
+                        style="width: 100px; height: 100px;">
+                        <i class="fa-solid fa-motorcycle fa-2x text-secondary"></i>
+                    </div>
+                    <h4 class="text-light text-uppercase m-0">Reserve Your Ride Anytime</h4>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-2">
+                <div class="d-flex align-items-center bg-light p-4 mb-4" style="height: 150px;">
+                    <div class="d-flex align-items-center justify-content-center flex-shrink-0 bg-primary ml-n4 mr-4"
+                        style="width: 100px; height: 100px;">
+                        <i class="fa fa-2x fa-map-marker-alt text-secondary"></i>
+                    </div>
+                    <h4 class="text-uppercase m-0">Lots Of Pickup Locations</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- About End -->
+
+
+<!-- Services Start -->
+<div class="container-fluid py-5">
+    <div class="container pt-5 pb-3">
+        <h1 class="display-1 text-primary text-center">02</h1>
+        <h1 class="display-4 text-uppercase text-center mb-5">Our Services</h1>
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-2">
+                <div class="service-item d-flex flex-column justify-content-center px-4 mb-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="d-flex align-items-center justify-content-center bg-primary ml-n4"
+                            style="width: 80px; height: 80px;">
+                            <i class="fa-solid fa-motorcycle fa-2x text-secondary"></i>
+                        </div>
+                        <h1 class="display-2 text-white mt-n2 m-0">01</h1>
+                    </div>
+                    <h4 class="text-uppercase mb-3">Instant Bike Rental</h4>
+                    <p class="m-0">Book a bike within seconds using our smart platform. Enjoy seamless digital booking,
+                        quick verification, and instant access to your ride anytime, anywhere in the city.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-2">
+                <div class="service-item active d-flex flex-column justify-content-center px-4 mb-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="d-flex align-items-center justify-content-center bg-primary ml-n4"
+                            style="width: 80px; height: 80px;">
+                            <i class="fa fa-2x fa-money-check-alt text-secondary"></i>
+                        </div>
+                        <h1 class="display-2 text-white mt-n2 m-0">02</h1>
+                    </div>
+                    <h4 class="text-uppercase mb-3">Flexible Pricing Plans</h4>
+                    <p class="m-0">Choose from hourly, daily, or weekly rental plans that fit your needs.
+                        Our transparent pricing ensures no hidden charges and complete affordability for every rider.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-2">
+                <div class="service-item d-flex flex-column justify-content-center px-4 mb-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="d-flex align-items-center justify-content-center bg-primary ml-n4"
+                            style="width: 80px; height: 80px;">
+                            <i class="fa-solid fa-screwdriver-wrench fa-2x text-secondary"></i>
+                        </div>
+                        <h1 class="display-2 text-white mt-n2 m-0">03</h1>
+                    </div>
+                    <h4 class="text-uppercase mb-3">Bike Maintenance Tracking</h4>
+                    <p class="m-0">Every bike is regularly inspected and maintained using real-time tracking systems to
+                        ensure safety,
+                        performance, and a smooth riding experience for our customers.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-2">
+                <div class="service-item d-flex flex-column justify-content-center px-4 mb-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="d-flex align-items-center justify-content-center bg-primary ml-n4"
+                            style="width: 80px; height: 80px;">
+                            <i class="fa-solid fa-headset fa-2x text-secondary"></i>
+                        </div>
+                        <h1 class="display-2 text-white mt-n2 m-0">04</h1>
+                    </div>
+                    <h4 class="text-uppercase mb-3">24/7 Customer Support</h4>
+                    <p class="m-0">Our dedicated support team is available round the clock to assist you with bookings,
+                        ride issues, or any emergency support during your rental period.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-2">
+                <div class="service-item d-flex flex-column justify-content-center px-4 mb-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="d-flex align-items-center justify-content-center bg-primary ml-n4"
+                            style="width: 80px; height: 80px;">
+                            <i class="fa-solid fa-qrcode fa-2x text-secondary"></i>
+                        </div>
+                        <h1 class="display-2 text-white mt-n2 m-0">05</h1>
+                    </div>
+                    <h4 class="text-uppercase mb-3">QR Code Unlock</h4>
+                    <p class="m-0">Unlock your rented bike instantly by scanning a secure QR code through our
+                        mobile platform. No keys required - just scan and ride.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-2">
+                <div class="service-item d-flex flex-column justify-content-center px-4 mb-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="d-flex align-items-center justify-content-center bg-primary ml-n4"
+                            style="width: 80px; height: 80px;">
+                            <i class="fa-solid fa-location-dot fa-2x text-secondary"></i>
+                        </div>
+                        <h1 class="display-2 text-white mt-n2 m-0">06</h1>
+                    </div>
+                    <h4 class="text-uppercase mb-3">Real-Time Availability</h4>
+                    <p class="m-0">Check live bike availability near your location through our system.
+                        Find, reserve, and ride without waiting or uncertainty.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Services End -->
+
+<!-- Banner Start -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="bg-banner text-center d-flex align-items-center justify-content-center" style="min-height: 600px;">
+
+            <div>
+                <h1 class="display-2 text-uppercase text-primary fw-bold mb-4">
+                    🚲 Ride Smart. Ride Green.
+                </h1>
+
+                <h2 class="text-uppercase text-light mb-4">
+                    Get 1st Ride Free for New Users
+                </h2>
+
+                <p class="text-light fs-5 mb-5">
+                    Exclusive Offer For First-Time Riders
+                </p>
+
+                <a class="btn btn-primary btn-lg px-5 py-3" href="{% url 'start_booking' %}">
+                    Start Riding Now
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Banner End -->
+
+
+<!-- Rent A E-Cycle Start -->
+<div class="container-fluid py-5">
+    <div class="container pt-5 pb-3">
+        <h1 class="display-1 text-primary text-center">03</h1>
+        <h1 class="display-4 text-uppercase text-center mb-5">Find Your E-Cycle</h1>
+        <div class="row">
+
+            {% for i in vehicles %}
+            <div class="col-lg-4 col-md-6 mb-2">
+                <div class="rent-item mb-4">
+
+                    <!-- Vehicle Image -->
+                    {% if i.vehicle_img %}
+                    <img class="img-fluid mb-4" src="{{ i.vehicle_img.url }}" alt="{{ i.vehicle_name }}">
+                    {% else %}
+                    <img class="img-fluid mb-4" src="{% static 'userapp/img/Ecycle-rent-1.png' %}" alt="No Image">
+                    {% endif %}
+
+                    <!-- Vehicle Name -->
+                    <h4 class="text-uppercase mb-4">{{ i.vehicle_name }}</h4>
+
+                    <!-- Vehicle Info -->
+                    <div class="d-flex justify-content-center mb-4">
+                        <div class="px-2">
+                            <i class="fa fa-bicycle text-primary mr-1"></i>
+                            <span>{{ i.vehicle_type.type_name }}</span>
+                        </div>
+                        <div class="px-2 border-left border-right">
+                            <i class="fa fa-map-marker text-primary mr-1"></i>
+                            <span>{{ i.city.city_name }}</span>
+                        </div>
+                        <div class="px-2">
+                            <i class="fa fa-tag text-primary mr-1"></i>
+                            <span>{{ i.category.category_name }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Price -->
+                    <h5 class="text-center text-primary mb-2">
+                        ₹{{ i.price_per_hour }}/Hour
+                    </h5>
+
+                    <!-- Availability -->
+                    {% if i.is_available|lower == "yes" %}
+                    <a class="btn btn-success px-3 d-block mb-2 text-center">✅ Available</a>
+                    <a href="{% url 'booking_page' i.id %}" class="btn btn-primary px-3 d-block mb-2 text-center">Book
+                        Now</a>
+                    {% else %}
+                    <a class="btn btn-danger px-3 d-block mb-2 text-center">❌ Not Available</a>
+                    {% endif %}
+
+                    <!-- Description -->
+                    <p class="text-center text-muted mt-2 mb-5">{{ i.description }}</p>
+
+                    <!-- Hover Reveal - View Details -->
+                    {% if i.is_available|lower == "yes" %}
+                    <a href="{% url 'vehicle_detail' i.id %}"
+                        class="detail-overlay text-white font-weight-bold text-decoration-none text-uppercase"
+                        style="letter-spacing: 1px;">
+                        View Details →
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- Rent A E-Cycle End --> 
+
+<style>
+    .choose-product-card:hover {
+        background-color: var(--secondary) !important;
+    }
+
+    .choose-product-card:hover h5 {
+        color: white !important;
+    }
+</style>
+
+
+<!-- Why Choose CityCycle Start -->
+<div class="container-fluid py-5">
+    <div class=" py-5 px-5">
+        <h1 class="display-1 text-primary text-center"></h1>
+        <div class="py-5">
+            <!-- Section Title -->
+            <div class="text-center mb-5">
+                <h1 class="display-1 text-primary text-center">04</h1>
+                <h1 class="display-4 text-uppercase text-center mb-5"> Why Choose CityCycle</h1>
+                <p class="text-success font-weight-bold h4">
+                    Smart, Sustainable & Friendly Bike Sharing Platform
+                </p>
+            </div>
+
+            <div class="row">
+                <!-- Feature 1 -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="choose-product-card bg-white text-center border p-4 shadow rounded h-100">
+                        <div class="mb-3">
+                            <i class="fa fa-wallet fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="text-uppercase mb-3">Affordable Pricing</h5>
+                        <p class="m-0 text-muted">
+                            Budget-friendly rental plans specially designed for students and daily commuters.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="choose-product-card bg-white text-center border p-4 shadow rounded h-100">
+                        <div class="mb-3">
+                            <i class="fa fa-leaf fa-3x text-success"></i>
+                        </div>
+                        <h5 class="text-uppercase mb-3">Eco-Friendly</h5>
+                        <p class="m-0 text-muted">
+                            Reduce pollution and promote a greener and cleaner environment.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="choose-product-card bg-white text-center border p-4 shadow rounded h-100">
+                        <div class="mb-3">
+                            <i class="fa fa-mobile-alt fa-3x text-info"></i>
+                        </div>
+                        <h5 class="text-uppercase mb-3">Easy Booking</h5>
+                        <p class="m-0 text-muted">
+                            Simple and fast online reservation system with instant confirmation.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="choose-product-card bg-white text-center border p-4 shadow rounded h-100">
+                        <div class="mb-3">
+                            <i class="fa fa-map-marker-alt fa-3x text-danger"></i>
+                        </div>
+                        <h5 class="text-uppercase mb-3">Multiple Stations</h5>
+                        <p class="m-0 text-muted">
+                            Convenient pickup & drop stations available across the city.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Why Choose CityCycle End -->
+
+
+<!-- Testimonial Start -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <h1 class="display-1 text-primary text-center">05</h1>
+        <h1 class="display-4 text-uppercase text-center mb-5">Our Client's Say</h1>
+        <div class="owl-carousel testimonial-carousel">
+            <div class="testimonial-item d-flex flex-column justify-content-center px-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <img class="img-fluid ml-n4" src="{% static 'userapp/img/testimonial-1.jpg' %}" alt="">
+                    <h1 class="display-2 text-white m-0 fa fa-quote-right"></h1>
+                </div>
+                <h4 class="text-uppercase mb-2">Rohit</h4>
+                <i class="mb-2">Software Engineer</i>
+                <p class="m-0">CityCycle has completely changed my daily commute. The bikes are well-maintained, easy to
+                    unlock, and very affordable.
+                    It’s a smart and eco-friendly way to travel.</p>
+            </div>
+            <div class="testimonial-item d-flex flex-column justify-content-center px-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <img class="img-fluid ml-n4" src="{% static 'userapp/img/testimonial-2.jpg' %}" alt="">
+                    <h1 class="display-2 text-white m-0 fa fa-quote-right"></h1>
+                </div>
+                <h4 class="text-uppercase mb-2">Sneha</h4>
+                <i class="mb-2">Student</i>
+                <p class="m-0">I love how convenient and simple the booking process is.
+                    The unlimited ride option is perfect for students like me. Highly recommended!</p>
+            </div>
+            <div class="testimonial-item d-flex flex-column justify-content-center px-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <img class="img-fluid ml-n4" src="{% static 'userapp/img/testimonial-3.jpg' %}" alt="">
+                    <h1 class="display-2 text-white m-0 fa fa-quote-right"></h1>
+                </div>
+                <h4 class="text-uppercase mb-2">Harsh</h4>
+                <i class="mb-2">Marketing Executive</i>
+                <p class="m-0">CityCycle helps me avoid traffic and reach my destination on time.
+                    The service is reliable, affordable, and environmentally friendly.</p>
+            </div>
+            <div class="testimonial-item d-flex flex-column justify-content-center px-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <img class="img-fluid ml-n4" src="{% static 'userapp/img/testimonial-4.jpg' %}" alt="">
+                    <h1 class="display-2 text-white m-0 fa fa-quote-right"></h1>
+                </div>
+                <h4 class="text-uppercase mb-2">Zeel</h4>
+                <i class="mb-2">Graphic Designer</i>
+                <p class="m-0">Great service and well-maintained bikes. I highly recommend CityCycle to
+                    anyone looking for a reliable bike-sharing platform.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Testimonial End -->
+
+
+<!-- Contact Start -->
+<div class="container-fluid py-5">
+    <div class="container pt-5 pb-3">
+        <h1 class="display-1 text-primary text-center">06</h1>
+        <h1 class="display-4 text-uppercase text-center mb-5">Contact Us</h1>
+        <div class="row">
+            <div class="col-lg-7 mb-2">
+                <div class="contact-form bg-light mb-4" style="padding: 30px;">
+                    <form>
+                        <div class="row">
+                            <div class="col-6 form-group">
+                                <input type="text" class="form-control p-4" placeholder="Your Name" required="required">
+                            </div>
+                            <div class="col-6 form-group">
+                                <input type="email" class="form-control p-4" placeholder="Your Email"
+                                    required="required">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control p-4" placeholder="Subject" required="required">
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control py-3 px-4" rows="5" placeholder="Message"
+                                required="required"></textarea>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary py-3 px-5" type="submit">Send Message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-5 mb-2">
+                <div class="bg-secondary d-flex flex-column justify-content-center px-5 mb-4" style="height: 435px;">
+                    <div class="d-flex mb-3">
+                        <i class="fa fa-2x fa-map-marker-alt text-primary flex-shrink-0 mr-3"></i>
+                        <div class="mt-n1">
+                            <h5 class="text-light">Head Office</h5>
+                            <p>CityCycle Headquarters
+                                Near Kankaria Lake,
+                                Maninagar, Ahmedabad, Gujarat, India</p>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <i class="fa fa-2x fa-map-marker-alt text-primary flex-shrink-0 mr-3"></i>
+                        <div class="mt-n1">
+                            <h5 class="text-light">Branch Office</h5>
+                            <p>Heritage Cycle Point, Near Juhu Beach, Juhu, Mumbai, Maharashtra, India</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex mb-3">
+                        <i class="fa fa-2x fa-envelope-open text-primary flex-shrink-0 mr-3"></i>
+                        <div class="mt-n1">
+                            <h5 class="text-light">Customer Service</h5>
+                            <p>support@citycycle.com</p>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <i class="fa fa-2x fa-envelope-open text-primary flex-shrink-0 mr-3"></i>
+                        <div class="mt-n1">
+                            <h5 class="text-light">Return & Refund</h5>
+                            <p class="m-0">refund@citycycle.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Contact End -->
+
+
+<!-- Vendor Start -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="owl-carousel vendor-carousel">
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-1.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-2.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-3.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-4.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-5.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-6.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-7.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-8.png' %}" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Vendor End -->
+
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends 'userapp/master.html' %}
+{% load static %}
+{% block content %}
+
+
+<!-- Page Header Start -->
+<div class="container-fluid page-header d-flex align-items-center justify-content-center" style="min-height: 550px;">
+
+    <div class="text-center">
+        <h1 class="display-1 text-uppercase text-white mb-3">
+            Testimonial
+        </h1>
+
+        <div class="d-inline-flex text-white">
+            <h6 class="text-uppercase m-0">
+                <a class="text-white" href="">Home</a>
+            </h6>
+            <h6 class="text-body m-0 px-3">/</h6>
+            <h6 class="text-uppercase text-body m-0">
+                Testimonial
+            </h6>
+        </div>
+    </div>
+
+</div>
+<!-- Page Header End -->
+
+
+<!-- Testimonial Start -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <h1 class="display-4 text-uppercase text-center mb-5">Our Client's Say</h1>
+        <div class="owl-carousel testimonial-carousel">
+            <div class="testimonial-item d-flex flex-column justify-content-center px-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <img class="img-fluid ml-n4" src="{% static 'userapp/img/testimonial-1.jpg' %}" alt="">
+                    <h1 class="display-2 text-white m-0 fa fa-quote-right"></h1>
+                </div>
+                <h4 class="text-uppercase mb-2">Rohit</h4>
+                <i class="mb-2">Software Engineer</i>
+                <p class="m-0">CityCycle has completely changed my daily commute. The bikes are well-maintained, easy to
+                    unlock, and very affordable.
+                    It’s a smart and eco-friendly way to travel.</p>
+            </div>
+            <div class="testimonial-item d-flex flex-column justify-content-center px-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <img class="img-fluid ml-n4" src="{% static 'userapp/img/testimonial-2.jpg' %}" alt="">
+                    <h1 class="display-2 text-white m-0 fa fa-quote-right"></h1>
+                </div>
+                <h4 class="text-uppercase mb-2">Sneha</h4>
+                <i class="mb-2">Student</i>
+                <p class="m-0">I love how convenient and simple the booking process is.
+                    The unlimited ride option is perfect for students like me. Highly recommended!</p>
+            </div>
+            <div class="testimonial-item d-flex flex-column justify-content-center px-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <img class="img-fluid ml-n4" src="{% static 'userapp/img/testimonial-3.jpg' %}" alt="">
+                    <h1 class="display-2 text-white m-0 fa fa-quote-right"></h1>
+                </div>
+                <h4 class="text-uppercase mb-2">Harsh</h4>
+                <i class="mb-2">Marketing Executive</i>
+                <p class="m-0">CityCycle helps me avoid traffic and reach my destination on time.
+                    The service is reliable, affordable, and environmentally friendly.</p>
+            </div>
+            <div class="testimonial-item d-flex flex-column justify-content-center px-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <img class="img-fluid ml-n4" src="{% static 'userapp/img/testimonial-4.jpg' %}" alt="">
+                    <h1 class="display-2 text-white m-0 fa fa-quote-right"></h1>
+                </div>
+                <h4 class="text-uppercase mb-2">Zeel</h4>
+                <i class="mb-2">Graphic Designer</i>
+                <p class="m-0">Great service and well-maintained bikes. I highly recommend CityCycle to
+                    anyone looking for a reliable bike-sharing platform.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Testimonial End -->
+
+<!-- Vendor Start -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="owl-carousel vendor-carousel">
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-1.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-2.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-3.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-4.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-5.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-6.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-7.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-8.png' %}" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Vendor End -->
+
+{% endblock %}

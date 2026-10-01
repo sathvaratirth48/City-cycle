@@ -1,0 +1,131 @@
+{% extends 'userapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Page Header Start -->
+<div class="container-fluid page-header d-flex align-items-center justify-content-center" style="min-height: 550px;">
+
+    <div class="text-center">
+        <h1 class="display-1 text-uppercase text-white mb-3">
+            E-Cycle Listing
+        </h1>
+
+        <div class="d-inline-flex text-white">
+            <h6 class="text-uppercase m-0">
+                <a class="text-white" href="">Home</a>
+            </h6>
+            <h6 class="text-body m-0 px-3">/</h6>
+            <h6 class="text-uppercase text-body m-0">
+                E-Cycle Listing
+            </h6>
+        </div>
+    </div>
+
+</div>
+<!-- Page Header End --> 
+
+<!-- Rent A E-Cycle Start -->
+<div class="container-fluid py-5">
+    <div class="container pt-5 pb-3">
+        <h1 class="display-4 text-uppercase text-center mb-5">Find Your E-Cycle</h1>
+        <div class="row">
+            {% for i in vehicles %}
+            <div class="col-lg-4 col-md-6 mb-2">
+                <div class="rent-item mb-4">
+
+                    <!-- Vehicle Image -->
+                    {% if i.vehicle_img %}
+                    <img class="img-fluid mb-4" src="{{ i.vehicle_img.url }}" alt="{{ i.vehicle_name }}">
+                    {% else %}
+                    <img class="img-fluid mb-4" src="{% static 'userapp/img/Ecycle-rent-1.png' %}" alt="No Image">
+                    {% endif %}
+
+                    <!-- Vehicle Name -->
+                    <h4 class="text-uppercase mb-4">{{ i.vehicle_name }}</h4>
+
+                    <!-- Vehicle Info -->
+                    <div class="d-flex justify-content-center mb-4">
+                        <div class="px-2">
+                            <i class="fa fa-bicycle text-primary mr-1"></i>
+                            <span>{{ i.vehicle_type.type_name }}</span>
+                        </div>
+                        <div class="px-2 border-left border-right">
+                            <i class="fa fa-map-marker text-primary mr-1"></i>
+                            <span>{{ i.city.city_name }}</span>
+                        </div>
+                        <div class="px-2">
+                            <i class="fa fa-tag text-primary mr-1"></i>
+                            <span>{{ i.category.category_name }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Price --> 
+                    <h5 class="text-center text-primary mb-2">
+                        ₹{{ i.price_per_hour }}/Hour
+                    </h5>
+
+                    <!-- Availability -->
+                    {% if i.is_available|lower == "yes" %}
+                    <a class="btn btn-success px-3 d-block mb-2 text-center">✅ Available</a>
+                    <a href="{% url 'booking_page' i.id %}" class="btn btn-primary px-3 d-block mb-2 text-center">Book
+                        Now</a>
+                    {% else %}
+                    <a class="btn btn-danger px-3 d-block mb-2 text-center">❌ Not Available</a>
+                    {% endif %}
+
+                    <!-- Description -->
+                    <p class="text-center text-muted mt-2 mb-5">{{ i.description }}</p>
+
+                    <!-- Hover Reveal - View Details -->
+                    {% if i.is_available|lower == "yes" %}
+                    <a href="{% url 'vehicle_detail' i.id %}"
+                        class="detail-overlay text-white font-weight-bold text-decoration-none text-uppercase"
+                        style="letter-spacing: 1px;">
+                        View Details →
+                    </a>
+                    {% endif %}
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- Rent A E-Cycle End -->
+
+
+<!-- Vendor Start -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="owl-carousel vendor-carousel">
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-1.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-2.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-3.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-4.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-5.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-6.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-7.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-8.png' %}" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Vendor End -->
+
+
+{% endblock %}

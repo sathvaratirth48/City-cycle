@@ -1,0 +1,79 @@
+{% extends 'userapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<div class="nxl-content">
+    <section class="section mt-5 mx-auto">
+        <div class="row">
+            <div class="col-lg-6 mx-auto">
+                <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                    <div class="card-header bg-warning text-dark p-4 text-center">
+                        <h3 class="mb-0 fw-bold">
+                            <i class="fa fa-star me-2"></i> Leave a Review
+                        </h3>
+                        <p class="mb-0 mt-2">How was your ride with <strong>{{ booking.vehicle.vehicle_name }}</strong>?</p>
+                    </div>
+                    
+                    <div class="card-body p-5 bg-white">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="mb-4 text-center">
+                                <label class="form-label fw-semibold text-dark mb-3">Rate your experience</label>
+                                <div class="rating-stars" style="font-size: 2rem; color: #ffc107; cursor: pointer;">
+                                    <i class="fa fa-star star-rating" data-rating="1"></i>
+                                    <i class="fa fa-star star-rating" data-rating="2"></i>
+                                    <i class="fa fa-star star-rating" data-rating="3"></i>
+                                    <i class="fa fa-star star-rating" data-rating="4"></i>
+                                    <i class="fa fa-star star-rating" data-rating="5"></i>
+                                </div>
+                                <input type="hidden" name="rating" id="ratingValue" value="5">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold text-dark">Tell us about your ride</label>
+                                <textarea name="review" class="form-control form-control-lg" rows="5" 
+                                          placeholder="Share your thoughts about the cycle's condition, comfort, and your overall experience..." required></textarea>
+                            </div>
+                            
+                            <div class="d-grid gap-3">
+                                <button type="submit" class="btn btn-warning btn-lg fw-bold shadow-sm text-dark">
+                                    Submit Review
+                                </button>
+                                <a href="{% url 'list_Booking_user' %}" class="btn btn-light btn-lg text-muted fw-semibold">
+                                    Skip
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const stars = document.querySelectorAll('.star-rating');
+    const ratingValue = document.getElementById('ratingValue');
+
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            let rating = this.getAttribute('data-rating');
+            ratingValue.value = rating;
+            
+            // Update UI
+            stars.forEach(s => {
+                if (s.getAttribute('data-rating') <= rating) {
+                    s.classList.remove('fa-star-o');
+                    s.classList.add('fa-star');
+                } else {
+                    s.classList.remove('fa-star');
+                    s.classList.add('fa-star-o');
+                }
+            });
+        });
+    });
+});
+</script>
+
+{% endblock %}

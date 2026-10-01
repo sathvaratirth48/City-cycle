@@ -1,0 +1,223 @@
+{% extends 'userapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<div class="nxl-content">
+    <section class="section mt-5 mx-auto">
+        <div class="row">
+            <div class="col-lg-6 mx-auto">
+                <!-- Payment Card -->
+                <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                    <div class="card-header bg-primary text-white p-4 text-center">
+                        <h3 class="mb-0 fw-bold">
+                            <i class="fa fa-lock me-2"></i> Secure Payment
+                        </h3>
+                        <p class="mb-0 mt-2 text-white-50">Complete your booking for CityCycle</p>
+                    </div>
+                    
+                    <div class="card-body p-5 bg-white">
+                        <div class="d-flex justify-content-between align-items-center mb-4 p-3 bg-light rounded-3 border">
+                            <span class="fs-5 text-muted">Amount to Pay</span>
+                            <span class="fs-3 fw-bold text-primary">₹{{ booking.total_amount }}</span>
+                        </div>
+
+                        <form method="POST" action="{% url 'process_payment' booking.id %}" id="payment-form">
+                            {% csrf_token %}
+                            
+                            <!-- Card Holder Name -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold text-dark">Cardholder Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-transparent"><i class="fa fa-user text-muted"></i></span>
+                                    <input type="text" class="form-control form-control-lg" placeholder="JOHN DOE" required
+                                           oninput="this.value = this.value.toUpperCase().replace(/[^A-Z\s]/g, '')">
+                                </div>
+                            </div>
+                            
+                            <!-- Card Number -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold text-dark">Card Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-transparent"><i class="fa fa-credit-card text-muted"></i></span>
+                                    <input type="text" class="form-control form-control-lg" id="cardNumber" 
+                                           placeholder="0000 0000 0000 0000" maxlength="19" required>
+                                </div>
+                                <div class="invalid-feedback" id="cardError">Please enter a valid 16-digit card number.</div>
+                            </div>
+                            
+                            <div class="row">
+                                <!-- Expiry Date -->
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label fw-semibold text-dark">Expiry Date (MM/YY)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-transparent"><i class="fa fa-calendar text-muted"></i></span>
+                                        <input type="text" class="form-control form-control-lg" id="expiryDate" 
+                                               placeholder="MM/YY" maxlength="5" required>
+                                        <div class="invalid-feedback">Please enter a valid future expiry date.</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- CVV -->
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label fw-semibold text-dark">CVV</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-transparent"><i class="fa fa-shield text-muted"></i></span>
+                                        <input type="password" class="form-control form-control-lg" id="cvv" 
+                                               placeholder="***" maxlength="3" required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <hr class="my-4">
+                            
+                            <!-- Buttons -->
+                            <div class="d-grid gap-3">
+                                <button type="submit" class="btn btn-primary btn-lg fw-bold shadow-sm" id="payButton">
+                                    Pay ₹{{ booking.total_amount }} Now
+                                </button>
+                                <a href="{% url 'list_Booking_user' %}" class="btn btn-light btn-lg text-muted fw-semibold">
+                                    Cancel Payment
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Trust Badges -->
+                <div class="text-center mt-4">
+                    <p class="text-muted small"><i class="fa fa-lock text-success"></i> Your payment information is encrypted and secure.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const cardNumber = document.getElementById("cardNumber");
+    const expiryDate = document.getElementById("expiryDate");
+    const cvv = document.getElementById("cvv");
+    const form = document.getElementById("payment-form");
+
+    // Format Card Number (Only digits + spaces)
+    cardNumber.addEventListener("input", function (e) {
+        // Remove non-digits
+        let value = e.target.value.replace(/\D/g, "");
+        
+        // Add space every 4 digits
+        let formattedValue = "";
+        for (let i = 0; i < value.length; i++) {
+            if (i > 0 && i % 4 === 0) {
+                formattedValue += " ";
+            }
+            formattedValue += value[i];
+        }
+        
+        e.target.value = formattedValue;
+        
+        // Validation styling
+        if (value.length === 16) {
+            this.classList.remove("is-invalid");
+            this.classList.add("is-valid");
+        } else {
+            this.classList.remove("is-valid");
+        }
+    });
+
+    // Format Expiry Date (MM/YY)
+    expiryDate.addEventListener("input", function (e) {
+        let value = e.target.value.replace(/\D/g, "");
+        
+        // Month validation on the fly
+        if (value.length >= 1 && parseInt(value[0]) > 1) {
+            value = "0" + value[0]; // Assume 02-09
+        }
+        if (value.length >= 2) {
+            let month = parseInt(value.substring(0, 2));
+            if (month > 12) {
+                value = "12" + value.substring(2);
+            } else if (month === 0) {
+                value = "01" + value.substring(2);
+            }
+        }
+
+        if (value.length > 2) {
+            value = value.substring(0, 2) + "/" + value.substring(2, 4);
+        }
+        e.target.value = value;
+
+        validateExpiryDate(this);
+    });
+
+    function validateExpiryDate(inputElement) {
+        let value = inputElement.value;
+        if (value.length !== 5) {
+            inputElement.classList.remove("is-valid");
+            inputElement.classList.add("is-invalid");
+            return false;
+        }
+        
+        let month = parseInt(value.substring(0, 2));
+        let year = parseInt(value.substring(3, 5));
+        
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth() + 1;
+        let currentYear = parseInt(currentDate.getFullYear().toString().substring(2, 4));
+        
+        if (year < currentYear || (year === currentYear && month < currentMonth)) {
+            inputElement.classList.remove("is-valid");
+            inputElement.classList.add("is-invalid");
+            return false;
+        } else {
+            inputElement.classList.remove("is-invalid");
+            inputElement.classList.add("is-valid");
+            return true;
+        }
+    }
+
+    // CVV - Only digits
+    cvv.addEventListener("input", function (e) {
+        e.target.value = e.target.value.replace(/\D/g, "");
+        
+        // Validation styling
+        if (e.target.value.length === 3) {
+            this.classList.remove("is-invalid");
+            this.classList.add("is-valid");
+        } else {
+            this.classList.remove("is-valid");
+        }
+    });
+
+    // Form Validation before submit
+    form.addEventListener("submit", function (e) {
+        let valid = true;
+        
+        // Validate Card Number Length (16 digits = 19 chars with spaces)
+        if (cardNumber.value.replace(/\s/g, "").length !== 16) {
+            cardNumber.classList.add("is-invalid");
+            valid = false;
+        } else {
+            cardNumber.classList.remove("is-invalid");
+        }
+        
+        // Validate CVV Length
+        if (cvv.value.length !== 3) {
+            cvv.classList.add("is-invalid");
+            valid = false;
+        } else {
+            cvv.classList.remove("is-invalid");
+        }
+        
+        // Validate Expiry
+        if (!validateExpiryDate(expiryDate)) {
+            valid = false;
+        }
+
+        if (!valid) {
+            e.preventDefault(); // Stop submission
+        }
+    });
+});
+</script>
+
+{% endblock %}

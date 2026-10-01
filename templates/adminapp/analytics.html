@@ -1,0 +1,440 @@
+{% extends 'adminapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<div class="nxl-content">
+    <div class="page-header">
+        <div class="page-header-left d-flex align-items-center">
+            <div class="page-header-title">
+                <h5 class="m-b-10">Analytics</h5>
+            </div>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item">Analytics</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="row">
+
+            <!-- KPI Cards -->
+            <div class="col-12">
+                <div class="card stretch stretch-full">
+                    <div class="card-body">
+                        <div class="hstack justify-content-between mb-4 pb-4">
+                            <div>
+                                <h5 class="mb-1">Booking Overview</h5>
+                                <span class="fs-12 text-muted">CityCycle Rental Summary</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xxl-2 col-lg-4 col-md-6">
+                                <div class="card stretch stretch-full border border-dashed border-gray-5">
+                                    <div class="card-body rounded-3 text-center">
+                                        <i class="bi bi-calendar-check fs-3 text-primary"></i>
+                                        <div class="fs-4 fw-bolder text-dark mt-3 mb-1">{{ total_bookings }}</div>
+                                        <p class="fs-12 fw-medium text-muted mb-0">Total Bookings</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xxl-2 col-lg-4 col-md-6">
+                                <div class="card stretch stretch-full border border-dashed border-gray-5">
+                                    <div class="card-body rounded-3 text-center">
+                                        <i class="bi bi-check-circle fs-3 text-success"></i>
+                                        <div class="fs-4 fw-bolder text-dark mt-3 mb-1">{{ confirmed_bookings }}</div>
+                                        <p class="fs-12 fw-medium text-muted mb-0">Confirmed</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xxl-2 col-lg-4 col-md-6">
+                                <div class="card stretch stretch-full border border-dashed border-gray-5">
+                                    <div class="card-body rounded-3 text-center">
+                                        <i class="bi bi-trophy fs-3 text-warning"></i>
+                                        <div class="fs-4 fw-bolder text-dark mt-3 mb-1">{{ completed_bookings }}</div>
+                                        <p class="fs-12 fw-medium text-muted mb-0">Completed</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xxl-2 col-lg-4 col-md-6">
+                                <div class="card stretch stretch-full border border-dashed border-gray-5">
+                                    <div class="card-body rounded-3 text-center">
+                                        <i class="bi bi-x-circle fs-3 text-danger"></i>
+                                        <div class="fs-4 fw-bolder text-dark mt-3 mb-1">{{ cancelled_bookings }}</div>
+                                        <p class="fs-12 fw-medium text-muted mb-0">Cancelled</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xxl-2 col-lg-4 col-md-6">
+                                <div class="card stretch stretch-full border border-dashed border-gray-5">
+                                    <div class="card-body rounded-3 text-center">
+                                        <i class="bi bi-hourglass-split fs-3 text-indigo"></i>
+                                        <div class="fs-4 fw-bolder text-dark mt-3 mb-1">{{ pending_bookings }}</div>
+                                        <p class="fs-12 fw-medium text-muted mb-0">Pending</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xxl-2 col-lg-4 col-md-6">
+                                <div class="card stretch stretch-full border border-dashed border-gray-5">
+                                    <div class="card-body rounded-3 text-center">
+                                        <i class="bi bi-currency-rupee fs-3 text-teal"></i>
+                                        <div class="fs-4 fw-bolder text-dark mt-3 mb-1">Rs.{{ total_revenue }}</div>
+                                        <p class="fs-12 fw-medium text-muted mb-0">Total Revenue</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monthly Chart -->
+            <div class="col-xxl-8">
+                <div class="card stretch stretch-full">
+                    <div class="card-header">
+                        <h5 class="card-title">Monthly Bookings &amp; Revenue</h5>
+                        <div class="card-header-action">
+                            <div class="card-header-btn">
+                                <div data-bs-toggle="tooltip" title="Maximize/Minimize">
+                                    <a href="#" class="avatar-text avatar-xs bg-success" data-bs-toggle="expand"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body custom-card-action">
+                        <div id="monthly-bookings-chart"></div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row g-4">
+                            <div class="col-lg-3">
+                                <div class="p-3 border border-dashed rounded">
+                                    <div class="fs-12 text-muted mb-1">Total Bookings</div>
+                                    <h6 class="fw-bold text-dark">{{ total_bookings }}</h6>
+                                    <div class="progress mt-2 ht-3"><div class="progress-bar bg-primary" style="width:81%"></div></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="p-3 border border-dashed rounded">
+                                    <div class="fs-12 text-muted mb-1">Paid Bookings</div>
+                                    <h6 class="fw-bold text-dark">{{ paid_bookings }}</h6>
+                                    <div class="progress mt-2 ht-3"><div class="progress-bar bg-success" style="width:72%"></div></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="p-3 border border-dashed rounded">
+                                    <div class="fs-12 text-muted mb-1">Unpaid Bookings</div>
+                                    <h6 class="fw-bold text-dark">{{ unpaid_bookings }}</h6>
+                                    <div class="progress mt-2 ht-3"><div class="progress-bar bg-danger" style="width:28%"></div></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="p-3 border border-dashed rounded">
+                                    <div class="fs-12 text-muted mb-1">Total Revenue</div>
+                                    <h6 class="fw-bold text-dark">Rs.{{ total_revenue }}</h6>
+                                    <div class="progress mt-2 ht-3"><div class="progress-bar bg-dark" style="width:75%"></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vehicle Type Donut -->
+            <div class="col-xxl-4">
+                <div class="card stretch stretch-full">
+                    <div class="card-header">
+                        <h5 class="card-title">Vehicle Type Distribution</h5>
+                        <div class="card-header-action">
+                            <div class="card-header-btn">
+                                <div data-bs-toggle="tooltip" title="Maximize/Minimize">
+                                    <a href="#" class="avatar-text avatar-xs bg-success" data-bs-toggle="expand"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="vehicle-type-donut-chart"></div>
+                    </div>
+                    <a href="javascript:void(0);" class="card-footer fs-11 fw-bold text-uppercase text-center">Explore Details</a>
+                </div>
+            </div>
+
+            <!-- Sparkline Cards -->
+            <div class="col-xxl-3 col-md-6">
+                <div class="card stretch stretch-full">
+                    <div class="card-body p-0">
+                        <div class="d-flex justify-content-between p-4 mb-4">
+                            <div>
+                                <div class="fw-bold mb-2 text-dark">Total Users</div>
+                                <div class="fs-11 text-muted">Registered Users</div>
+                            </div>
+                            <div class="text-end">
+                                <div class="fs-24 fw-bold mb-2 text-dark">{{ total_users }}</div>
+                                <div class="fs-11 text-success">All Users</div>
+                            </div>
+                        </div>
+                        <div id="users-spark"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-md-6">
+                <div class="card stretch stretch-full">
+                    <div class="card-body p-0">
+                        <div class="d-flex justify-content-between p-4 mb-4">
+                            <div>
+                                <div class="fw-bold mb-2 text-dark">Approved Users</div>
+                                <div class="fs-11 text-muted">Out of {{ total_users }}</div>
+                            </div>
+                            <div class="text-end">
+                                <div class="fs-24 fw-bold mb-2 text-dark">{{ approved_users }}</div>
+                                <div class="fs-11 text-primary">Approved</div>
+                            </div>
+                        </div>
+                        <div id="approved-spark"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-md-6">
+                <div class="card stretch stretch-full">
+                    <div class="card-body p-0">
+                        <div class="d-flex justify-content-between p-4 mb-4">
+                            <div>
+                                <div class="fw-bold mb-2 text-dark">Total Vehicles</div>
+                                <div class="fs-11 text-muted">Fleet Size</div>
+                            </div>
+                            <div class="text-end">
+                                <div class="fs-24 fw-bold mb-2 text-dark">{{ total_vehicles }}</div>
+                                <div class="fs-11 text-warning">In Fleet</div>
+                            </div>
+                        </div>
+                        <div id="vehicles-spark"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-md-6">
+                <div class="card stretch stretch-full">
+                    <div class="card-body p-0">
+                        <div class="d-flex justify-content-between p-4 mb-4">
+                            <div>
+                                <div class="fw-bold mb-2 text-dark">Cancellations</div>
+                                <div class="fs-11 text-muted">Total Cancelled</div>
+                            </div>
+                            <div class="text-end">
+                                <div class="fs-24 fw-bold mb-2 text-dark">{{ cancelled_bookings }}</div>
+                                <div class="fs-11 text-danger">Cancelled</div>
+                            </div>
+                        </div>
+                        <div id="cancel-spark"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booking Status Progress Rings -->
+            <div class="col-xxl-4">
+                <div class="card stretch stretch-full">
+                    <div class="card-header">
+                        <h5 class="card-title">Booking Status Breakdown</h5>
+                        <div class="card-header-action">
+                            <div class="card-header-btn">
+                                <div data-bs-toggle="tooltip" title="Maximize/Minimize">
+                                    <a href="#" class="avatar-text avatar-xs bg-success" data-bs-toggle="expand"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body custom-card-action">
+                        <div class="row g-4">
+                            <div class="col-sm-6">
+                                <div class="px-4 py-3 text-center border border-dashed rounded-3">
+                                    <div class="mx-auto mb-4"><div class="goal-progress-1"></div></div>
+                                    <h2 class="fs-13 tx-spacing-1">Confirmed</h2>
+                                    <div class="fs-11 text-muted">{{ confirmed_bookings }} / {{ total_bookings }}</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="px-4 py-3 text-center border border-dashed rounded-3">
+                                    <div class="mx-auto mb-4"><div class="goal-progress-2"></div></div>
+                                    <h2 class="fs-13 tx-spacing-1">Completed</h2>
+                                    <div class="fs-11 text-muted">{{ completed_bookings }} / {{ total_bookings }}</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="px-4 py-3 text-center border border-dashed rounded-3">
+                                    <div class="mx-auto mb-4"><div class="goal-progress-3"></div></div>
+                                    <h2 class="fs-13 tx-spacing-1">Pending</h2>
+                                    <div class="fs-11 text-muted">{{ pending_bookings }} / {{ total_bookings }}</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="px-4 py-3 text-center border border-dashed rounded-3">
+                                    <div class="mx-auto mb-4"><div class="goal-progress-4"></div></div>
+                                    <h2 class="fs-13 tx-spacing-1">Cancelled</h2>
+                                    <div class="fs-11 text-muted">{{ cancelled_bookings }} / {{ total_bookings }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Bookings Table -->
+            <div class="col-xxl-8">
+                <div class="card stretch stretch-full">
+                    <div class="card-header">
+                        <h5 class="card-title">Recent Bookings</h5>
+                        <div class="card-header-action">
+                            <div class="card-header-btn">
+                                <div data-bs-toggle="tooltip" title="Maximize/Minimize">
+                                    <a href="#" class="avatar-text avatar-xs bg-success" data-bs-toggle="expand"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body custom-card-action p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>User</th>
+                                        <th>Vehicle</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Payment</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for b in recent_bookings %}
+                                    <tr>
+                                        <td>{{ b.id }}</td>
+                                        <td>
+                                            <div class="border-3 border-start rounded ps-3">
+                                                <a href="javascript:void(0);" class="mb-1 d-block">{{ b.user.username }}</a>
+                                                <p class="fs-12 text-muted mb-0">{{ b.user.email }}</p>
+                                            </div>
+                                        </td>
+                                        <td>{{ b.vehicle.vehicle_name }}</td>
+                                        <td>{{ b.booking_date }}</td>
+                                        <td>Rs.{{ b.total_amount }}</td>
+                                        <td>
+                                            {% if b.booking_status == 'Confirmed' %}
+                                                <span class="badge bg-soft-success text-success">Confirmed</span>
+                                            {% elif b.booking_status == 'Completed' %}
+                                                <span class="badge bg-soft-primary text-primary">Completed</span>
+                                            {% elif b.booking_status == 'Cancelled' %}
+                                                <span class="badge bg-soft-danger text-danger">Cancelled</span>
+                                            {% else %}
+                                                <span class="badge bg-soft-warning text-warning">{{ b.booking_status }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if b.payment_status == 'Paid' %}
+                                                <span class="badge bg-soft-success text-success">Paid</span>
+                                            {% else %}
+                                                <span class="badge bg-soft-danger text-danger">Unpaid</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr><td colspan="7" class="text-center text-muted py-4">No bookings found.</td></tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'admin_list_booking' %}" class="btn btn-primary btn-sm">View All Bookings</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- INLINE CHART SCRIPTS - Fix for missing analytics-init.min.js in master.html -->
+<script>
+(function() {
+    var monthlyLabels  = {{ monthly_labels|safe }};
+    var monthlyData    = {{ monthly_data|safe }};
+    var monthlyRevenue = {{ monthly_revenue|safe }};
+    var vtLabels       = {{ vt_labels|safe }};
+    var vtData         = {{ vt_data|safe }};
+    var totalBookings  = {{ total_bookings|default:0 }};
+    var confirmedPct   = totalBookings > 0 ? Math.round({{ confirmed_bookings|default:0 }} / totalBookings * 100) : 0;
+    var completedPct   = totalBookings > 0 ? Math.round({{ completed_bookings|default:0 }} / totalBookings * 100) : 0;
+    var pendingPct     = totalBookings > 0 ? Math.round({{ pending_bookings|default:0 }}   / totalBookings * 100) : 0;
+    var cancelledPct   = totalBookings > 0 ? Math.round({{ cancelled_bookings|default:0 }} / totalBookings * 100) : 0;
+
+    function initCharts() {
+        if (typeof ApexCharts === 'undefined') { setTimeout(initCharts, 200); return; }
+
+        // Monthly Bookings + Revenue
+        new ApexCharts(document.querySelector('#monthly-bookings-chart'), {
+            chart: { type: 'bar', height: 370, toolbar: { show: false } },
+            series: [
+                { name: 'Bookings', type: 'bar',  data: monthlyData },
+                { name: 'Revenue (Rs.)', type: 'line', data: monthlyRevenue }
+            ],
+            colors: ['#3454d1', '#25b865'],
+            plotOptions: { bar: { horizontal: false, columnWidth: '35%', borderRadius: 4 } },
+            dataLabels: { enabled: false },
+            stroke: { width: [0, 2], curve: 'smooth' },
+            xaxis: {
+                categories: monthlyLabels,
+                axisBorder: { show: false }, axisTicks: { show: false },
+                labels: { style: { colors: '#64748b', fontFamily: 'Inter' } }
+            },
+            yaxis: [
+                { title: { text: 'Bookings' }, labels: { style: { color: '#64748b' } } },
+                { opposite: true, title: { text: 'Revenue (Rs.)' }, labels: { style: { color: '#64748b' } } }
+            ],
+            grid: { strokeDashArray: 3, borderColor: '#e9ecef' },
+            tooltip: { style: { fontFamily: 'Inter' } },
+            legend: { show: true, fontFamily: 'Inter', labels: { colors: '#64748b' } }
+        }).render();
+
+        // Vehicle Type Donut
+        new ApexCharts(document.querySelector('#vehicle-type-donut-chart'), {
+            chart: { type: 'donut', height: 320, toolbar: { show: false } },
+            series: vtData.length > 0 ? vtData : [1],
+            labels: vtLabels.length > 0 ? vtLabels : ['No Data'],
+            colors: ['#3454d1','#25b865','#e49e3d','#d13b4c','#41B2C4','#8b5cf6'],
+            dataLabels: { enabled: true, style: { fontFamily: 'Inter' } },
+            legend: { show: true, position: 'bottom', fontFamily: 'Inter', labels: { colors: '#64748b' } },
+            tooltip: { style: { fontFamily: 'Inter' } }
+        }).render();
+
+        // Sparklines
+        function spark(id, color, data) {
+            new ApexCharts(document.querySelector(id), {
+                chart: { type: 'area', height: 80, sparkline: { enabled: true } },
+                series: [{ data: data }],
+                stroke: { width: 1, curve: 'smooth' },
+                fill: { opacity: [0.85], gradient: { inverseColors: false, shade: 'light', type: 'vertical', opacityFrom: 0.5, opacityTo: 0.1, stops: [0,100] } },
+                yaxis: { min: 0 }, colors: [color]
+            }).render();
+        }
+        spark('#users-spark',    '#3454d1', [10,15,12,20,18,25,22,30,28,35]);
+        spark('#approved-spark', '#25b865', [8,12,10,16,15,20,18,25,22,28]);
+        spark('#vehicles-spark', '#e49e3d', [5,8,7,10,9,12,11,14,13,16]);
+        spark('#cancel-spark',   '#d13b4c', [3,2,5,1,4,3,2,6,4,3]);
+
+        // Circle Progress
+        if (typeof jQuery !== 'undefined' && jQuery.fn.circleProgress) {
+            jQuery('.goal-progress-1').circleProgress({ max:100, value: confirmedPct,  textFormat:'percent' });
+            jQuery('.goal-progress-2').circleProgress({ max:100, value: completedPct,  textFormat:'percent' });
+            jQuery('.goal-progress-3').circleProgress({ max:100, value: pendingPct,    textFormat:'percent' });
+            jQuery('.goal-progress-4').circleProgress({ max:100, value: cancelledPct,  textFormat:'percent' });
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCharts);
+    } else {
+        initCharts();
+    }
+})();
+</script>
+
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends 'userapp/master.html' %}
+{% load static %}
+{% block content %}
+
+
+<!-- Page Header Start -->
+<div class="container-fluid page-header d-flex align-items-center justify-content-center" style="min-height: 550px;">
+
+    <div class="text-center">
+        <h1 class="display-1 text-uppercase text-white mb-3">
+            About
+        </h1>
+
+        <div class="d-inline-flex text-white">
+            <h6 class="text-uppercase m-0">
+                <a class="text-white" href="">Home</a>
+            </h6>
+            <h6 class="text-body m-0 px-3">/</h6>
+            <h6 class="text-uppercase text-body m-0">
+                About
+            </h6>
+        </div>
+    </div>
+
+</div>
+<!-- Page Header End -->
+
+
+<!-- About Start -->
+<div class="container-fluid py-5">
+    <div class="container pt-5 pb-3">
+        <h1 class="display-4 text-uppercase text-center mb-5">Welcome To <span class="text-primary">CityCycle –
+                Bike Sharing Platform</span></h1>
+        <div class="row justify-content-center">
+            <div class="col-lg-10 text-center">
+                <img class="w-75 mb-4" src="{% static 'userapp/img/about.png' %}" alt="">
+                <p>CityCycle is a modern and eco-friendly bike sharing platform designed to make urban travel smarter,
+                    faster, and more sustainable.
+                    Our system allows users to easily locate, unlock, and ride bicycles through a seamless digital
+                    experience.
+                    Whether commuting to work, exploring the city, or enjoying a leisure ride, CityCycle provides a
+                    convenient and affordable transportation solution.
+                    With multiple bike types including standard, mountain, and electric bikes, we ensure comfort and
+                    flexibility for every rider.
+                    Our smart docking stations and real-time tracking technology make rentals simple and secure. Join
+                    CityCycle today and experience a cleaner, greener way to move around your city.</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-lg-4 mb-2">
+                <div class="d-flex align-items-center bg-light p-4 mb-4" style="height: 150px;">
+                    <div class="d-flex align-items-center justify-content-center flex-shrink-0 bg-primary ml-n4 mr-4"
+                        style="width: 100px; height: 100px;">
+                        <i class="fa fa-2x fa-headset text-secondary"></i>
+                    </div>
+                    <h4 class="text-uppercase m-0">24/7 Bike Support</h4>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-2">
+                <div class="d-flex align-items-center bg-secondary p-4 mb-4" style="height: 150px;">
+                    <div class="d-flex align-items-center justify-content-center flex-shrink-0 bg-primary ml-n4 mr-4"
+                        style="width: 100px; height: 100px;">
+                        <i class="fa-solid fa-motorcycle fa-2x text-secondary"></i>
+                    </div>
+                    <h4 class="text-light text-uppercase m-0">Reserve Your Ride Anytime</h4>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-2">
+                <div class="d-flex align-items-center bg-light p-4 mb-4" style="height: 150px;">
+                    <div class="d-flex align-items-center justify-content-center flex-shrink-0 bg-primary ml-n4 mr-4"
+                        style="width: 100px; height: 100px;">
+                        <i class="fa fa-2x fa-map-marker-alt text-secondary"></i>
+                    </div>
+                    <h4 class="text-uppercase m-0">Lots Of Pickup Locations</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- About End -->
+
+<!-- Vendor Start -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="owl-carousel vendor-carousel">
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-1.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-2.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-3.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-4.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-5.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-6.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-7.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-8.png' %}" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Vendor End -->
+
+
+{% endblock %}

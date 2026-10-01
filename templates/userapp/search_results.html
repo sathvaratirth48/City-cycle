@@ -1,0 +1,214 @@
+{% extends 'userapp/master.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .search-section{
+        background: linear-gradient(135deg,#f8f9fa,#eef2f7);
+        min-height:100vh;
+        padding:60px 0;
+    }
+
+    .result-title{
+        font-size:32px;
+        font-weight:800;
+        color:#111;
+    }
+
+    .result-subtitle{
+        color:#6c757d;
+        font-size:15px;
+    }
+
+    /* Card */
+    .vehicle-card{
+        background:#fff;
+        border-radius:22px;
+        overflow:hidden;
+        box-shadow:0 10px 30px rgba(0,0,0,.08);
+        transition:.35s ease;
+        border:2px solid transparent;
+    }
+
+    .vehicle-card:hover{
+        transform:translateY(-8px);
+        box-shadow:0 20px 45px rgba(0,0,0,.15);
+        border:2px solid #ff8800;   /* square bracket hover look */
+    }
+
+    /* Image Box */
+    .img-box{
+        padding:18px;
+        background:#fff;
+    }
+
+    .img-frame{
+        border:2px solid #ececec;
+        border-radius:16px;
+        overflow:hidden;
+        transition:.35s ease;
+        height:230px;
+    }
+
+    .vehicle-card:hover .img-frame{
+        border-color:#ff8800;
+        transform:scale(1.02);
+    }
+
+    .img-frame img{
+        width:100%;
+        height:100%;
+        object-fit:cover;
+    }
+
+    .vehicle-body{
+        padding:22px;
+    }
+
+    .vehicle-name{
+        font-size:26px;
+        font-weight:800;
+        color:#111;
+        margin-bottom:14px;
+    }
+
+    .booking-info{
+        font-size:15px;
+        line-height:1.9;
+        color:#555;
+    }
+
+    .booking-info i{
+        width:18px;
+        color:#0d6efd;
+        margin-right:5px;
+    }
+
+    .book-btn{
+        width:100%;
+        margin-top:18px;
+        border:none;
+        border-radius:50px;
+        padding:12px;
+        font-weight:700;
+        background:#ff8800;
+        color:#fff;
+        transition:.3s;
+    }
+
+    .book-btn:hover{
+        background:#111;
+        color:#fff;
+    }
+
+    /* Back Button Fixed */
+    .back-btn{
+        width:100%;
+        margin-top:12px;
+        border-radius:50px;
+        padding:11px;
+        font-weight:700;
+        background:#1d2240;
+        color:#fff;
+        text-align:center;
+        text-decoration:none;
+        display:block;
+        transition:.3s;
+    }
+
+    .back-btn:hover{
+        background:#ff8800;
+        color:#fff;
+        text-decoration:none;
+    }
+
+    .no-result-box{
+        background:#fff;
+        padding:40px;
+        border-radius:20px;
+        text-align:center;
+        box-shadow:0 8px 25px rgba(0,0,0,.08);
+    }
+
+    @media(max-width:768px){
+        .result-title{font-size:26px;}
+    }
+</style>
+
+<div class="search-section">
+    <div class="container">
+
+        <div class="mb-5">
+            <h2 class="result-title">Search Results</h2>
+            <p class="result-subtitle">Find your perfect ride for today</p>
+        </div>
+
+        {% if results %}
+        <div class="row g-4">
+
+            {% for vehicle in results %}
+            <div class="col-lg-4 col-md-6">
+
+                <div class="vehicle-card h-100">
+
+                    <!-- Image -->
+                    <div class="img-box">
+                        <div class="img-frame">
+                            {% if vehicle.vehicle_img %}
+                                <img src="{{ vehicle.vehicle_img.url }}" alt="{{ vehicle.vehicle_name }}">
+                            {% else %}
+                                <img src="{% static 'img/default-vehicle.jpg' %}" alt="Vehicle">
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="vehicle-body">
+
+                        <h4 class="vehicle-name">{{ vehicle.vehicle_name }}</h4>
+
+                        <div class="booking-info">
+                            <div><i class="fas fa-map-marker-alt"></i><b> Pickup:</b> {{ pickup_location.location_name }}</div>
+                            <div><i class="fas fa-location-arrow"></i><b> Drop:</b> {{ drop_location.location_name }}</div>
+
+                            <!-- Date Time Fix -->
+                            <div><i class="fas fa-calendar-alt"></i><b> Date:</b> {{ pickup_date }}</div>
+                            <div><i class="fas fa-clock"></i><b> Time:</b> {{ pickup_time }}</div>
+                        </div>
+                        <div class="d-flex flex-column justify-content-center align-items-center">
+                        <a href="{% url 'booking_page' vehicle.id %}?pickup={{ pickup_location.id }}&drop={{ drop_location.id }}&date={{ pickup_date }}&time={{ pickup_time }}"
+                           class="book-btn text-center" style="width: 100% !important;">
+                            Book Now
+                        </a>
+
+                        <a href="{% url 'home_page' %}" class="back-btn">
+                            ← Back to Home 
+                        </a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="no-result-box">
+            <h4>No Vehicles Found</h4>
+            <p class="text-muted">Try changing location, date or time.</p>
+
+            <a href="{% url 'home_page' %}" class="book-btn">
+                Search Again
+            </a>
+        </div>
+
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}

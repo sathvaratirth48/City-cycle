@@ -1,0 +1,182 @@
+{% extends 'adminapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<div class="nxl-content">
+    <!-- [ page-header ] start -->
+    <div class="page-header">
+        <div class="page-header-left d-flex align-items-center">
+            <div class="page-header-title">
+                <h5 class="m-b-10">Booking</h5>
+            </div>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item">Booking Lists</li>
+            </ul>
+        </div>
+        <div class="page-header-right ms-auto">
+            <div class="page-header-right-items">
+                <div class="d-flex d-md-none">
+                    <a href="javascript:void(0)" class="page-header-right-close-toggle">
+                        <i class="feather-arrow-left me-2"></i>
+                        <span>Back</span>
+                    </a>
+                </div>
+                <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
+                    <div class="dropdown filter-dropdown">
+                        <a class="btn btn-md btn-light-brand" data-bs-toggle="dropdown" data-bs-offset="0, 10"
+                            data-bs-auto-close="outside">
+                            <i class="feather-filter me-2"></i>
+                            <span>Filter</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <div class="dropdown-item">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="Role" checked="checked">
+                                    <label class="custom-control-label c-pointer" for="Role">Role</label>
+                                </div>
+                            </div>
+                            <div class="dropdown-item">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="Team" checked="checked">
+                                    <label class="custom-control-label c-pointer" for="Team">Team</label>
+                                </div>
+                            </div>
+                            <div class="dropdown-item">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="Email" checked="checked">
+                                    <label class="custom-control-label c-pointer" for="Email">Email</label>
+                                </div>
+                            </div>
+                            <div class="dropdown-item">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="Member" checked="checked">
+                                    <label class="custom-control-label c-pointer" for="Member">Member</label>
+                                </div>
+                            </div>
+                            <div class="dropdown-item">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="Recommendation"
+                                        checked="checked">
+                                    <label class="custom-control-label c-pointer"
+                                        for="Recommendation">Recommendation</label>
+                                </div>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <a href="javascript:void(0);" class="dropdown-item">
+                                <i class="feather-plus me-3"></i>
+                                <span>Create New</span>
+                            </a>
+                            <a href="javascript:void(0);" class="dropdown-item">
+                                <i class="feather-filter me-3"></i>
+                                <span>Manage Filter</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="javascript:void(0);" class="btn btn-md btn-primary">
+                        <i class="feather-plus me-2"></i>
+                        <span>Add Booking</span>
+                    </a>
+                </div>
+            </div>
+            <div class="d-md-none d-flex align-items-center">
+                <a href="javascript:void(0)" class="page-header-right-open-toggle">
+                    <i class="feather-align-right fs-20"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- [ page-header ] end -->
+    <section class="section mt-5 mx-auto">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">List Booking</h5>
+                        <!-- Default Table -->
+                         <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Vehicle</th>
+                                    <th>Pickup Location</th>
+                                    <th>Dropoff Location</th>
+                                    <th>Adult</th>
+                                    <th>Child</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                    <th>Total Hours</th>
+                                    <th>Total Amount</th>
+                                    <th>Booking Status</th>
+                                    <th>Payment Status</th>
+                                    <th>Booking Date</th>
+                                    <th>Special Requests</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in booking %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ i.vehicle.vehicle_name }}</td>
+                                    <td>{{ i.pickup_location }}</td>
+                                    <td>{{ i.dropoff_location }}</td>
+                                    <td>{{ i.adult }}</td>
+                                    <td>{{ i.child }}</td>
+                                    <td>{{ i.start_time|time:"h:i A" }}</td>
+                                    <td>{{ i.end_time|time:"h:i A" }}</td>
+                                    <td>{{ i.total_hours }}</td>
+                                    <td>{{ i.total_amount }}</td>
+                                    <td>
+                                        {% if i.booking_status == 'Confirmed' %}
+                                        <span class="badge bg-success">{{ i.booking_status }}</span>
+                                        {% elif i.booking_status == 'Pending' %}
+                                        <span class="badge bg-warning">{{ i.booking_status }}</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">{{ i.booking_status }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if i.payment_status == 'Paid' %}
+                                        <span class="badge bg-success text-white">Paid</span>
+                                        {% else %}
+                                        <span class="badge bg-danger text-white">Unpaid</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ i.booking_date|date:"d-m-Y" }}</td>
+                                    <td>{{ i.special_requests }}</td>
+                                    <td class="d-flex align-items-center gap-2">
+                                        {% if i.booking_status == 'Pending' %}
+                                        <!-- Accept Button --> 
+                                        <a href="{% url 'accept_booking' i.id %}">
+                                            <button class="btn btn-success rounded-0">
+                                                <i class="fa fa-check me-1"></i> Accept
+                                            </button>
+                                        </a>
+                                        <!-- Reject Button -->
+                                        <a href="{% url 'reject_booking' i.id %}">
+                                            <button class="btn btn-danger rounded-0 ms-1">
+                                                <i class="fa fa-times me-1"></i> Reject
+                                            </button>
+                                        </a>
+                                        {% else %}
+                                        <button class="btn btn-dark rounded-0" disabled>
+                                            {{ i.booking_status }}
+                                        </button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        </div>
+                        <!-- End Default Table Example -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+{% endblock %}

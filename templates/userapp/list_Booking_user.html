@@ -1,0 +1,118 @@
+{% extends 'userapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<div class="nxl-content">
+    <section class="section mt-5 mx-auto">
+        <div class="row">
+            <div class="col-lg-14 mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">List Booking</h5>
+                        <!-- Default Table -->
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Vehicle</th>
+                                    <th>Pickup Location</th>
+                                    <th>Dropoff Location</th>
+                                    <th>Adult</th>
+                                    <th>Child</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                    <th>Total Hours</th>
+                                    <th>Total Amount</th>
+                                    <th>Booking Status</th>
+                                    <th>Booking Date</th>
+                                    <th>Special Requests</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in booking %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ i.vehicle.vehicle_name }}</td>
+                                    <td>{{ i.pickup_location }}</td>
+                                    <td>{{ i.dropoff_location }}</td>
+                                    <td>{{ i.adult }}</td>
+                                    <td>{{ i.child }}</td>
+                                    <td>{{ i.start_time|time:"h:i A" }}</td>
+                                    <td>{{ i.end_time|time:"h:i A" }}</td>
+                                    <td>{{ i.total_hours }}</td>
+                                    <td>{{ i.total_amount }}</td>
+                                    <td>{{ i.booking_status }}</td>
+                                    <td>{{ i.booking_date|date:"d-m-Y" }}</td>
+                                    <td>{{ i.special_requests }}</td>
+                                    <td class="d-flex gap-3 align-items-center" style="gap: 10px;">
+                                        <!-- Track -->
+                                        <a href="{% url 'tracking_page' i.id %}">
+                                            <button class="btn btn-sm btn-info text-white">
+                                                <i class="fa fa-map-marker"></i> Track
+                                            </button>
+                                        </a>
+
+                                        {% if i.payment_status == 'Paid' %}
+                                        <!-- Invoice -->
+                                        <a href="{% url 'booking_invoice' i.id %}">
+                                            <button class="btn btn-sm btn-success">
+                                                <i class="fa fa-file-text"></i> Invoice
+                                            </button>
+                                        </a>
+                                        {% if not i.has_feedback %}
+                                        <!-- Feedback -->
+                                        <a href="{% url 'submit_feedback' i.id %}">
+                                            <button class="btn btn-sm btn-warning text-dark">
+                                                <i class="fa fa-star"></i> Review
+                                            </button>
+                                        </a>
+                                        {% endif %}
+                                        {% elif i.booking_status == 'Confirmed' %}
+                                        <!-- Pay Now -->
+                                        <a href="{% url 'pay_booking' i.id %}">
+                                            <button class="btn btn-sm btn-primary">
+                                                <i class="fa fa-credit-card"></i> Pay Now
+                                            </button>
+                                        </a>
+                                        {% endif %}
+
+                                        <!-- Update -->
+                                        <!-- <a href="{% url 'update_Booking' i.id %}?next={% url 'list_Booking_user' %}">
+                                            <button type="button" class="btn btn-sm btn-outline-primary">
+                                                <i class="fa fa-edit"></i>
+                                            </button>
+                                        </a> -->
+                                        <!-- Delete -->
+                                        <a href="{% url 'delete_booking' i.id %}"
+                                            onclick="return confirm('Are you sure you want to delete this Booking?')">
+                                            <button type="button" class="btn btn-sm btn-outline-danger">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </a>
+                                        <!-- Cancel -->
+                                        {% if i.booking_status == 'Pending' or i.booking_status == 'Confirmed' %}
+                                        <a href="{% url 'cancel_booking' i.id %}">
+                                            <button class="btn btn-sm btn-danger">
+                                                <i class="feather-x-circle me-1"></i> Cancel
+                                            </button>
+                                        </a>
+                                        {% elif i.booking_status != 'Confirmed' %}
+                                        <button class="btn btn-sm btn-dark" disabled>
+                                            {{ i.booking_status }}
+                                        </button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <!-- End Default Table Example -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+{% endblock %}

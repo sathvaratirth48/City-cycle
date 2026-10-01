@@ -1,0 +1,219 @@
+{% extends 'adminapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<div class="nxl-content">
+    <!-- [ page-header ] start -->
+    <div class="page-header">
+        <div class="page-header-left d-flex align-items-center">
+            <div class="page-header-title">
+                <h5 class="m-b-10">RentalLocation</h5>
+            </div>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item">Create RentalLocation Lists</li>
+            </ul>
+        </div>
+        <div class="page-header-right ms-auto">
+            <div class="page-header-right-items">
+                <div class="d-flex d-md-none">
+                    <a href="javascript:void(0)" class="page-header-right-close-toggle">
+                        <i class="feather-arrow-left me-2"></i>
+                        <span>Back</span>
+                    </a>
+                </div>
+                <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
+                    <div class="dropdown filter-dropdown">
+                        <a class="btn btn-md btn-light-brand" data-bs-toggle="dropdown" data-bs-offset="0, 10"
+                            data-bs-auto-close="outside">
+                            <i class="feather-filter me-2"></i>
+                            <span>Filter</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <div class="dropdown-item">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="Role" checked="checked">
+                                    <label class="custom-control-label c-pointer" for="Role">Role</label>
+                                </div>
+                            </div>
+                            <div class="dropdown-item">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="Team" checked="checked">
+                                    <label class="custom-control-label c-pointer" for="Team">Team</label>
+                                </div>
+                            </div>
+                            <div class="dropdown-item">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="Email" checked="checked">
+                                    <label class="custom-control-label c-pointer" for="Email">Email</label>
+                                </div>
+                            </div>
+                            <div class="dropdown-item">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="Member" checked="checked">
+                                    <label class="custom-control-label c-pointer" for="Member">Member</label>
+                                </div>
+                            </div>
+                            <div class="dropdown-item">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="Recommendation"
+                                        checked="checked">
+                                    <label class="custom-control-label c-pointer"
+                                        for="Recommendation">Recommendation</label>
+                                </div>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <a href="javascript:void(0);" class="dropdown-item">
+                                <i class="feather-plus me-3"></i>
+                                <span>Create New</span>
+                            </a>
+                            <a href="javascript:void(0);" class="dropdown-item">
+                                <i class="feather-filter me-3"></i>
+                                <span>Manage Filter</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="javascript:void(0);" class="btn btn-md btn-primary">
+                        <i class="feather-plus me-2"></i>
+                        <span>Add RentalLocation</span>
+                    </a>
+                </div>
+            </div>
+            <div class="d-md-none d-flex align-items-center">
+                <a href="javascript:void(0)" class="page-header-right-open-toggle">
+                    <i class="feather-align-right fs-20"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- [ page-header ] end -->
+
+    <section class="section mt-5 mx-auto">
+        <div class="row d-flex justify-content-center">
+            <div class="col-lg-11">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">General Form Elements</h5>
+                        <!-- General Form Elements -->
+                        <form method="post" enctype="multipart/form-data" class="mt-4">
+                            {% csrf_token %}
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">City</label>
+                                <div class="col-sm-10">
+                                    <select class="form-select" name="city" aria-label="Default select example">
+                                        <option selected>Select City</option>
+                                        {% for i in city %}
+                                        <option value="{{ i.id }}">{{ i.city_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-2 col-form-label">Location Name</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="location_name" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-2 col-form-label">address</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="address" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">Created At</label>
+                                <div class="col-sm-10">
+                                    <input type="date" name="created_at" class="form-control">
+                                </div>
+                            </div>
+
+                            <!-- MAP PICKER for Lat/Lng -->
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">📍 Pick on Map</label>
+                                <div class="col-sm-10">
+                                    <p class="text-muted small mb-2">Map pe click karo ya manually coordinates enter karo. Ye tracking ke liye zaroori hai.</p>
+                                    <div id="loc-picker-map" style="height:300px;border-radius:10px;border:1px solid #dee2e6;"></div>
+                                    <div class="row mt-2">
+                                        <div class="col-6">
+                                            <label class="form-label small fw-bold">Latitude</label>
+                                            <input type="number" step="0.000001" name="latitude" id="id_lat" class="form-control" placeholder="e.g. 23.022505">
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label small fw-bold">Longitude</label>
+                                            <input type="number" step="0.000001" name="longitude" id="id_lng" class="form-control" placeholder="e.g. 72.571362">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">Submit Button</label>
+                                <div class="col-sm-10">
+                                    <button type="submit" class="btn btn-primary">Submit Form</button>
+                                </div>
+                            </div>
+                        </form><!-- End General Form Elements -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+    // Leaflet, tile layer and attribution are set up centrally (master.html + citycycle_map.js)
+    var pmap = CityCycleMap.createMap('loc-picker-map', { center: [23.022505, 72.571362], zoom: 12 });
+    var latInput = document.getElementById('id_lat');
+    var lngInput = document.getElementById('id_lng');
+    if (!pmap || !latInput || !lngInput) { return; }   // no picker on this page
+
+    var marker = null;
+
+    function writeInputs(lat, lng) {
+        latInput.value = Number(lat).toFixed(6);
+        lngInput.value = Number(lng).toFixed(6);
+    }
+
+    // Create the marker once, then only move it (no duplicate markers)
+    function placeMarker(lat, lng, recenter) {
+        if (!CityCycleMap.validCoords(lat, lng)) { return; }
+        lat = Number(lat); lng = Number(lng);
+        if (marker) {
+            marker.setLatLng([lat, lng]);
+        } else {
+            marker = L.marker([lat, lng], { draggable: true }).addTo(pmap);
+            marker.on('dragend', function (e) {
+                var p = e.target.getLatLng();
+                writeInputs(p.lat, p.lng);
+                marker.setPopupContent('📍 ' + p.lat.toFixed(6) + ', ' + p.lng.toFixed(6));
+            });
+            marker.bindPopup('');
+        }
+        marker.setPopupContent('📍 ' + lat.toFixed(6) + ', ' + lng.toFixed(6));
+        if (recenter) { pmap.setView([lat, lng], Math.max(pmap.getZoom(), 15)); }
+    }
+
+    // Click on the map -> move marker + fill the inputs
+    pmap.on('click', function (e) {
+        writeInputs(e.latlng.lat, e.latlng.lng);
+        placeMarker(e.latlng.lat, e.latlng.lng, false);
+        marker.openPopup();
+    });
+
+    // Typing coordinates -> move marker (only when both values are valid)
+    function syncFromInputs() {
+        var lat = parseFloat(latInput.value), lng = parseFloat(lngInput.value);
+        if (CityCycleMap.validCoords(lat, lng)) { placeMarker(lat, lng, true); }
+    }
+    latInput.addEventListener('input', syncFromInputs);
+    lngInput.addEventListener('input', syncFromInputs);
+
+    // Inputs already filled (e.g. browser restored the form) -> show the marker
+    syncFromInputs();
+})();
+</script>
+{% endblock %}

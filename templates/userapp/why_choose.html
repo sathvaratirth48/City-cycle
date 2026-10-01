@@ -1,0 +1,142 @@
+{% extends 'userapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .choose-product-card:hover{
+        background-color: var(--secondary) !important;
+    }
+
+    .choose-product-card:hover h5{
+        color: white !important;
+    }
+</style>
+
+<!-- Page Header Start -->
+<div class="container-fluid page-header d-flex align-items-center justify-content-center" style="min-height: 550px;">
+
+    <div class="text-center">
+        <h1 class="display-1 text-uppercase text-white mb-3">
+            Why Choose CityCycle
+        </h1>
+
+        <div class="d-inline-flex text-white">
+            <h6 class="text-uppercase m-0">
+                <a class="text-white" href="">Home</a>
+            </h6>
+            <h6 class="text-body m-0 px-3">/</h6>
+            <h6 class="text-uppercase text-body m-0">
+                Why Choose CityCycle
+            </h6>
+        </div>
+    </div>
+
+</div>
+<!-- Page Header End -->
+
+<!-- Why Choose CityCycle Start -->
+<div class="container-fluid py-5">
+    <div class=" py-5 px-5">
+        <h1 class="display-1 text-primary text-center"></h1>
+        <div class="py-5">
+            <!-- Section Title -->
+            <div class="text-center mb-5">
+                <h1 class="display-4 text-uppercase text-center mb-5"> Why Choose CityCycle</h1>
+                <p class="text-success font-weight-bold h4">
+                    Smart, Sustainable & Friendly Bike Sharing Platform
+                </p>
+            </div>
+
+            <div class="row">
+                <!-- Feature 1 -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="choose-product-card bg-white text-center border p-4 shadow rounded h-100">
+                        <div class="mb-3">
+                            <i class="fa fa-wallet fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="text-uppercase mb-3">Affordable Pricing</h5>
+                        <p class="m-0 text-muted">
+                            Budget-friendly rental plans specially designed for students and daily commuters.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="choose-product-card bg-white text-center border p-4 shadow rounded h-100">
+                        <div class="mb-3">
+                            <i class="fa fa-leaf fa-3x text-success"></i>
+                        </div>
+                        <h5 class="text-uppercase mb-3">Eco-Friendly</h5>
+                        <p class="m-0 text-muted">
+                            Reduce pollution and promote a greener and cleaner environment.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="choose-product-card bg-white text-center border p-4 shadow rounded h-100">
+                        <div class="mb-3">
+                            <i class="fa fa-mobile-alt fa-3x text-info"></i>
+                        </div>
+                        <h5 class="text-uppercase mb-3">Easy Booking</h5>
+                        <p class="m-0 text-muted">
+                            Simple and fast online reservation system with instant confirmation.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="choose-product-card bg-white text-center border p-4 shadow rounded h-100">
+                        <div class="mb-3">
+                            <i class="fa fa-map-marker-alt fa-3x text-danger"></i>
+                        </div>
+                        <h5 class="text-uppercase mb-3">Multiple Stations</h5>
+                        <p class="m-0 text-muted">
+                            Convenient pickup & drop stations available across the city.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Why Choose CityCycle End -->
+
+<!-- Vendor Start -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="owl-carousel vendor-carousel">
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-1.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-2.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-3.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-4.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-5.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-6.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-7.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-8.png' %}" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Vendor End -->
+
+{% endblock %}

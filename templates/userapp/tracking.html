@@ -1,0 +1,487 @@
+{% extends 'userapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+  /* ─── Page Layout ─── */
+  .tracking-wrapper { background: #f0f4f8; min-height: 100vh; padding: 30px 0 60px; }
+
+  /* ─── Status Stepper ─── */
+  .stepper { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 32px; flex-wrap: wrap; }
+  .step { display: flex; flex-direction: column; align-items: center; position: relative; flex: 1; min-width: 80px; }
+  .step-circle {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700; border: 3px solid #ddd;
+    background: #fff; color: #aaa; transition: all .4s;
+    z-index: 2; position: relative;
+  }
+  .step.done   .step-circle { background: #25b865; border-color: #25b865; color: #fff; }
+  .step.active .step-circle { background: #3454d1; border-color: #3454d1; color: #fff; box-shadow: 0 0 0 5px rgba(52,84,209,.2); }
+  .step-label { font-size: 11px; font-weight: 600; color: #888; margin-top: 6px; text-align: center; }
+  .step.done .step-label, .step.active .step-label { color: #333; }
+  .step-line { flex: 1; height: 3px; background: #ddd; margin-top: -22px; }
+  .step-line.done { background: #25b865; }
+
+  /* ─── Map ─── */
+  #tracking-map { height: 360px; width: 100%; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,.12); }
+
+  /* ─── Info Cards ─── */
+  .info-card {
+    background: #fff; border-radius: 16px;
+    padding: 22px 24px; box-shadow: 0 2px 12px rgba(0,0,0,.07);
+    height: 100%;
+  }
+  .info-card h6 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #8a93a2; margin-bottom: 4px; }
+  .info-card .val { font-size: 22px; font-weight: 700; color: #1a2035; }
+  .info-card .sub { font-size: 12px; color: #8a93a2; margin-top: 2px; }
+
+  /* ─── Battery Bar ─── */
+  .battery-wrap { background: #e9ecef; border-radius: 6px; height: 10px; overflow: hidden; margin-top: 8px; }
+  .battery-fill { height: 100%; border-radius: 6px; transition: width .6s; }
+
+  /* ─── Status Badge ─── */
+  .status-pill {
+    display: inline-block; padding: 5px 14px; border-radius: 20px;
+    font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+  }
+  .pill-available   { background: #d4f5e5; color: #1a7a4a; }
+  .pill-in_use      { background: #dde4ff; color: #3454d1; }
+  .pill-maintenance { background: #ffecd0; color: #b85c00; }
+  .pill-charging    { background: #fff3cd; color: #856404; }
+
+  /* ─── Journey Card ─── */
+  .journey-route { display: flex; align-items: stretch; gap: 0; }
+  .route-dot { width: 14px; display: flex; flex-direction: column; align-items: center; }
+  .dot-circle { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+  .dot-line { flex: 1; width: 2px; background: #dde2ec; margin: 4px auto; }
+  .route-info { padding-left: 14px; padding-bottom: 18px; flex: 1; }
+  .route-label { font-size: 10px; text-transform: uppercase; letter-spacing: .8px; color: #8a93a2; }
+  .route-value { font-size: 15px; font-weight: 600; color: #1a2035; margin-top: 2px; }
+
+  /* ─── Live Pulse ─── */
+  @keyframes livePulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  .live-dot { display: inline-block; width: 8px; height: 8px; background: #25b865; border-radius: 50%; margin-right: 6px; animation: livePulse 1.5s infinite; }
+
+  /* ─── Refresh btn ─── */
+  .btn-track { background: #3454d1; color: #fff; border: none; padding: 10px 24px; border-radius: 10px; font-weight: 600; font-size: 14px; transition: .2s; }
+  .btn-track:hover { background: #2540b0; color: #fff; }
+
+  /* ─── Progress bar ─── */
+  .journey-progress-bar { height: 8px; border-radius: 4px; background: linear-gradient(90deg,#3454d1,#25b865); transition: width .6s; }
+</style>
+
+<div class="tracking-wrapper">
+  <div class="container">
+
+    <!-- ── Page Header ── -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <div>
+        <h3 class="fw-bold mb-1" style="color:#1a2035">
+          <span class="live-dot"></span>Live Tracking
+        </h3>
+        <p class="text-muted mb-0" style="font-size:13px">Booking #{{ booking.id }} &nbsp;·&nbsp; {{ booking.vehicle.vehicle_name }}</p>
+      </div>
+      <a href="{% url 'list_Booking_user' %}" class="btn btn-outline-secondary btn-sm rounded-pill">
+        ← My Bookings
+      </a>
+    </div>
+
+    <!-- ── Journey Status Stepper ── -->
+    <div class="info-card mb-4">
+      <p class="mb-3" style="font-size:13px;color:#8a93a2;font-weight:600;text-transform:uppercase;letter-spacing:1px">Journey Status</p>
+      <div class="stepper">
+        <!-- Pending -->
+        <div class="step {% if current_step >= 1 %}{% if current_step == 1 %}active{% else %}done{% endif %}{% endif %}">
+          <div class="step-circle">{% if current_step > 1 %}✓{% else %}1{% endif %}</div>
+          <div class="step-label">Pending</div>
+        </div>
+        <div class="step-line {% if current_step > 1 %}done{% endif %}"></div>
+        <!-- Confirmed -->
+        <div class="step {% if current_step >= 2 %}{% if current_step == 2 %}active{% else %}done{% endif %}{% endif %}">
+          <div class="step-circle">{% if current_step > 2 %}✓{% else %}2{% endif %}</div>
+          <div class="step-label">Confirmed</div>
+        </div>
+        <div class="step-line {% if current_step > 2 %}done{% endif %}"></div>
+        <!-- Ongoing -->
+        <div class="step {% if current_step >= 3 %}{% if current_step == 3 %}active{% else %}done{% endif %}{% endif %}">
+          <div class="step-circle">{% if current_step > 3 %}✓{% else %}3{% endif %}</div>
+          <div class="step-label">Ongoing</div>
+        </div>
+        <div class="step-line {% if current_step > 3 %}done{% endif %}"></div>
+        <!-- Completed -->
+        <div class="step {% if current_step >= 4 %}{% if current_step == 4 %}active{% else %}done{% endif %}{% endif %}">
+          <div class="step-circle">{% if current_step > 4 %}✓{% else %}4{% endif %}</div>
+          <div class="step-label">Completed</div>
+        </div>
+      </div>
+      <!-- Progress bar -->
+      <div style="background:#e9ecef;border-radius:4px;height:8px;overflow:hidden;margin-top:8px;">
+        <div class="journey-progress-bar" id="progress-bar" style="width:{{ progress_pct }}%"></div>
+      </div>
+      <p class="text-end mb-0 mt-1" style="font-size:11px;color:#8a93a2" id="progress-pct">{{ progress_pct }}% Complete</p>
+    </div>
+
+    <!-- ── Main Grid ── -->
+    <div class="row g-4">
+
+      <!-- LEFT: Map -->
+      <div class="col-lg-8">
+        <div class="info-card p-0 overflow-hidden">
+          <div class="d-flex align-items-center justify-content-between px-4 py-3" style="border-bottom:1px solid #f0f0f0">
+            <div>
+              <span style="font-weight:700;color:#1a2035;font-size:15px">🗺 Route Map</span>
+              <span class="ms-2" style="font-size:12px;color:#8a93a2">Pickup → Dropoff</span>
+            </div>
+            <button class="btn-track btn-sm" id="refresh-btn" onclick="refreshStatus()">
+              🔄 Refresh
+            </button>
+          </div>
+          <div id="tracking-map"></div>
+          <div class="px-4 py-2" style="font-size:11px;color:#8a93a2;border-top:1px solid #f5f5f5">
+            <span class="live-dot" style="width:6px;height:6px"></span>
+            Last updated: <span id="last-updated-text">{{ tracking.last_updated|date:"d M Y, h:i A" }}</span>
+            &nbsp;·&nbsp; Auto-refreshes every 15 seconds
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Details -->
+      <div class="col-lg-4">
+        <div class="d-flex flex-column gap-3 h-100">
+
+          <!-- Cycle Status -->
+          <div class="info-card">
+            <h6>Cycle Status</h6>
+            <div class="d-flex align-items-center gap-2 mt-2">
+              <span class="status-pill pill-{{ tracking.cycle_status }}" id="cycle-status-badge">
+                {% if tracking.cycle_status == 'available' %}✅ Available
+                {% elif tracking.cycle_status == 'in_use' %}🚴 In Use
+                {% elif tracking.cycle_status == 'maintenance' %}🔧 Maintenance
+                {% elif tracking.cycle_status == 'charging' %}⚡ Charging
+                {% endif %}
+              </span>
+            </div>
+            <div class="val mt-3" id="booking-status-text">{{ booking.booking_status }}</div>
+            <div class="sub">Booking Status</div>
+          </div>
+
+          <!-- Battery -->
+          <div class="info-card">
+            <h6>Battery Level</h6>
+            <div class="val mt-1" id="battery-text">{{ tracking.battery_level }}%</div>
+            <div class="battery-wrap mt-1">
+              <div class="battery-fill" id="battery-bar"
+                style="width:{{ tracking.battery_level }}%;
+                       background:{% if tracking.battery_level > 60 %}#25b865{% elif tracking.battery_level > 30 %}#f59e0b{% else %}#ef4444{% endif %}">
+              </div>
+            </div>
+            <div class="sub mt-1">
+              {% if tracking.battery_level > 60 %}Good charge — ready to go
+              {% elif tracking.battery_level > 30 %}Moderate — plan shorter rides
+              {% else %}Low battery — charge soon
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Timing -->
+          <div class="info-card">
+            <h6>Ride Timing</h6>
+            <div class="d-flex justify-content-between mt-2">
+              <div>
+                <div style="font-size:11px;color:#8a93a2">Start</div>
+                <div style="font-size:16px;font-weight:700;color:#1a2035">{{ booking.start_time|time:"h:i A" }}</div>
+              </div>
+              <div class="text-center">
+                <div style="font-size:11px;color:#8a93a2">Duration</div>
+                <div style="font-size:16px;font-weight:700;color:#3454d1">{{ booking.total_hours }}h</div>
+              </div>
+              <div class="text-end">
+                <div style="font-size:11px;color:#8a93a2">End</div>
+                <div style="font-size:16px;font-weight:700;color:#1a2035">{{ booking.end_time|time:"h:i A" }}</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Journey Route Card ── -->
+    <div class="info-card mt-4">
+      <div class="row g-4 align-items-center">
+        <div class="col-md-5">
+          <p class="mb-3" style="font-size:13px;color:#8a93a2;font-weight:600;text-transform:uppercase;letter-spacing:1px">Your Route</p>
+          <div class="journey-route">
+            <div class="route-dot">
+              <div class="dot-circle" style="background:#3454d1"></div>
+              <div class="dot-line"></div>
+              <div class="dot-circle" style="background:#25b865"></div>
+            </div>
+            <div>
+              <div class="route-info">
+                <div class="route-label">Pickup Location</div>
+                <div class="route-value">{{ booking.pickup_location }}</div>
+              </div>
+              <div class="route-info" style="padding-bottom:0">
+                <div class="route-label">Dropoff Location</div>
+                <div class="route-value">{{ booking.dropoff_location }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="row g-3">
+            <div class="col-6">
+              <div style="background:#f5f7ff;border-radius:12px;padding:14px">
+                <div style="font-size:10px;color:#8a93a2;text-transform:uppercase;letter-spacing:.8px">Vehicle</div>
+                <div style="font-size:14px;font-weight:700;color:#1a2035;margin-top:4px">{{ booking.vehicle.vehicle_name }}</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div style="background:#f5f7ff;border-radius:12px;padding:14px">
+                <div style="font-size:10px;color:#8a93a2;text-transform:uppercase;letter-spacing:.8px">Date</div>
+                <div style="font-size:14px;font-weight:700;color:#1a2035;margin-top:4px">{{ booking.booking_date|date:"d M Y" }}</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div style="background:#f5f7ff;border-radius:12px;padding:14px">
+                <div style="font-size:10px;color:#8a93a2;text-transform:uppercase;letter-spacing:.8px">Riders</div>
+                <div style="font-size:14px;font-weight:700;color:#1a2035;margin-top:4px">{{ booking.adult }} Adult{% if booking.child > 0 %}, {{ booking.child }} Child{% endif %}</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div style="background:#f5f7ff;border-radius:12px;padding:14px">
+                <div style="font-size:10px;color:#8a93a2;text-transform:uppercase;letter-spacing:.8px">Amount</div>
+                <div style="font-size:14px;font-weight:700;color:#25b865;margin-top:4px">Rs.{{ booking.total_amount }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 text-center">
+          {% if booking.booking_status == 'Confirmed' and booking.payment_status == 'Unpaid' %}
+          <a href="{% url 'pay_booking' booking.id %}" class="btn-track d-inline-block text-decoration-none mb-2" style="display:block">
+            💳 Pay Now
+          </a>
+          {% endif %}
+          <a href="{% url 'booking_invoice' booking.id %}" class="btn btn-outline-secondary btn-sm rounded-pill d-block mt-2">
+            📄 Invoice
+          </a>
+          <a href="{% url 'all_cycles_map' %}" class="btn btn-outline-primary btn-sm rounded-pill d-block mt-2">
+            🗺 All Stations
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ── Map Data from Django ──────────────────────────────────────────────────────
+var BOOKING_ID   = {{ booking.id }};
+var STATUS_API   = "{% url 'tracking_status_api' booking.id %}";
+
+// Pickup & dropoff coordinates (from RentalLocation if available, else null)
+var PICKUP_LAT   = {% if pickup_location and pickup_location.latitude %}{{ pickup_location.latitude }}{% else %}null{% endif %};
+var PICKUP_LNG   = {% if pickup_location and pickup_location.longitude %}{{ pickup_location.longitude }}{% else %}null{% endif %};
+var DROPOFF_LAT  = {% if dropoff_location and dropoff_location.latitude %}{{ dropoff_location.latitude }}{% else %}null{% endif %};
+var DROPOFF_LNG  = {% if dropoff_location and dropoff_location.longitude %}{{ dropoff_location.longitude }}{% else %}null{% endif %};
+var CYCLE_LAT    = {% if tracking.current_latitude %}{{ tracking.current_latitude }}{% else %}null{% endif %};
+var CYCLE_LNG    = {% if tracking.current_longitude %}{{ tracking.current_longitude }}{% else %}null{% endif %};
+
+// All rental locations
+var ALL_LOCATIONS = [
+  {% for loc in all_locations %}
+  {
+    name: "{{ loc.location_name }}",
+    address: "{{ loc.address }}",
+    lat: {{ loc.latitude }},
+    lng: {{ loc.longitude }},
+  },
+  {% endfor %}
+];
+
+// ── Leaflet Map Init ──────────────────────────────────────────────────────────
+// Default center: Ahmedabad, Gujarat
+var defaultLat = PICKUP_LAT || 23.022505;
+var defaultLng = PICKUP_LNG || 72.571362;
+
+// Leaflet, tile layer and attribution are set up centrally (master.html + citycycle_map.js).
+// createMap() returns null if #tracking-map is not on the page.
+var map = CityCycleMap.createMap('tracking-map', {
+  center: CityCycleMap.validCoords(defaultLat, defaultLng) ? [defaultLat, defaultLng] : undefined,
+  zoom: 13
+});
+
+// Custom icons
+function makeIcon(color, emoji) {
+  return L.divIcon({
+    className: '',
+    html: '<div style="background:' + color + ';width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,.3);border:3px solid #fff;">' + emoji + '</div>',
+    iconSize: [36, 36],
+    iconAnchor: [18, 18],
+    popupAnchor: [0, -20],
+  });
+}
+
+var pickupIcon   = makeIcon('#3454d1', '📍');
+var dropoffIcon  = makeIcon('#25b865', '🏁');
+var cycleIcon    = makeIcon('#f59e0b', '🚴');
+var stationIcon  = makeIcon('#8b5cf6', '🔋');
+
+// Add pickup marker
+if (map && CityCycleMap.validCoords(PICKUP_LAT, PICKUP_LNG)) {
+  L.marker([PICKUP_LAT, PICKUP_LNG], { icon: pickupIcon })
+    .addTo(map)
+    .bindPopup('<b>📍 Pickup</b><br>{{ booking.pickup_location }}')
+    .openPopup();
+}
+
+// Add dropoff marker
+if (map && CityCycleMap.validCoords(DROPOFF_LAT, DROPOFF_LNG)) {
+  L.marker([DROPOFF_LAT, DROPOFF_LNG], { icon: dropoffIcon })
+    .addTo(map)
+    .bindPopup('<b>🏁 Dropoff</b><br>{{ booking.dropoff_location }}');
+}
+
+// Draw route line between pickup and dropoff
+if (map && CityCycleMap.validCoords(PICKUP_LAT, PICKUP_LNG) && CityCycleMap.validCoords(DROPOFF_LAT, DROPOFF_LNG)) {
+  L.polyline(
+    [[PICKUP_LAT, PICKUP_LNG], [DROPOFF_LAT, DROPOFF_LNG]],
+    { color: '#3454d1', weight: 3, dashArray: '8, 6', opacity: .8 }
+  ).addTo(map);
+}
+
+// Cycle current position marker
+var cycleMarker = null;
+if (map && CityCycleMap.validCoords(CYCLE_LAT, CYCLE_LNG)) {
+  cycleMarker = L.marker([CYCLE_LAT, CYCLE_LNG], { icon: cycleIcon })
+    .addTo(map)
+    .bindPopup('<b>🚴 {{ booking.vehicle.vehicle_name }}</b><br>{{ tracking.current_location_name|default:"En route" }}');
+}
+
+// Add all rental station markers
+ALL_LOCATIONS.forEach(function(loc) {
+  if (!map || !CityCycleMap.validCoords(loc.lat, loc.lng)) { return; }   // skip missing/invalid coordinates
+  L.marker([loc.lat, loc.lng], { icon: stationIcon })
+    .addTo(map)
+    .bindPopup('<b>🔋 ' + loc.name + '</b><br><small>' + loc.address + '</small>');
+});
+
+// No coordinates yet? The map still renders at the default centre; markers are added only
+// once valid coordinates exist (see the validCoords() checks above and in refreshStatus()).
+
+// ── Auto-refresh status every 15 seconds ─────────────────────────────────────
+function refreshStatus() {
+  var btn = document.getElementById('refresh-btn');
+  btn.textContent = '⏳ Updating...';
+  btn.disabled = true;
+
+  fetch(STATUS_API)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+
+      // ✅ Booking status text update
+      document.getElementById('booking-status-text').textContent = data.booking_status;
+
+      // ✅ Cycle status badge update
+      var statusMap = {
+        'available':   '✅ Available',
+        'in_use':      '🚴 In Use',
+        'maintenance': '🔧 Maintenance',
+        'charging':    '⚡ Charging',
+      };
+      var badge = document.getElementById('cycle-status-badge');
+      badge.textContent = statusMap[data.cycle_status] || data.cycle_status;
+      badge.className = 'status-pill pill-' + data.cycle_status;
+
+      // ✅ Battery update
+      document.getElementById('battery-text').textContent = data.battery_level + '%';
+      var bar = document.getElementById('battery-bar');
+      bar.style.width = data.battery_level + '%';
+      bar.style.background = data.battery_level > 60 ? '#25b865' : data.battery_level > 30 ? '#f59e0b' : '#ef4444';
+
+      // ✅ Progress bar update
+      document.getElementById('progress-bar').style.width = data.progress_pct + '%';
+      document.getElementById('progress-pct').textContent = data.progress_pct + '% Complete';
+
+      // ✅ Last updated time
+      document.getElementById('last-updated-text').textContent = data.last_updated;
+
+      // ✅ Stepper update — naya code
+      updateStepper(data.booking_status);
+
+      // ✅ Cycle marker update
+      if (map && CityCycleMap.validCoords(data.current_lat, data.current_lng)) {
+        if (cycleMarker) {
+          cycleMarker.setLatLng([data.current_lat, data.current_lng]);
+        } else {
+          cycleMarker = L.marker([data.current_lat, data.current_lng], { icon: cycleIcon })
+            .addTo(map)
+            .bindPopup('<b>🚴 ' + data.vehicle_name + '</b>');
+        }
+      }
+
+      // ✅ Completed hone pe 3 sec baad booking list pe redirect
+      if (data.booking_status === 'Completed') {
+        document.getElementById('booking-status-text').textContent = '🏁 Completed!';
+        setTimeout(function() {
+          window.location.href = "{% url 'list_Booking_user' %}";
+        }, 3000);
+      }
+
+      btn.textContent = '✅ Updated!';
+      setTimeout(function() {
+        btn.textContent = '🔄 Refresh';
+        btn.disabled = false;
+      }, 1500);
+    })
+    .catch(function() {
+      btn.textContent = '❌ Failed';
+      setTimeout(function() {
+        btn.textContent = '🔄 Refresh';
+        btn.disabled = false;
+      }, 1500);
+    });
+}
+
+// ✅ Stepper dynamically update karne ka function
+function updateStepper(bookingStatus) {
+  var statusSteps = ['Pending', 'Confirmed', 'Ongoing', 'Completed'];
+  var currentStep = statusSteps.indexOf(bookingStatus) + 1;
+
+  var steps = document.querySelectorAll('.step');
+  var lines = document.querySelectorAll('.step-line');
+
+  steps.forEach(function(step, index) {
+    step.classList.remove('active', 'done');
+    var circle = step.querySelector('.step-circle');
+
+    if (index + 1 < currentStep) {
+      step.classList.add('done');
+      circle.textContent = '✓';
+    } else if (index + 1 === currentStep) {
+      step.classList.add('active');
+      circle.textContent = index + 1;
+    } else {
+      circle.textContent = index + 1;
+    }
+  });
+
+  lines.forEach(function(line, index) {
+    line.classList.remove('done');
+    if (index + 1 < currentStep) {
+      line.classList.add('done');
+    }
+  });
+}
+
+// Auto-poll every 15 seconds
+setInterval(refreshStatus, 15000);
+</script>
+
+{% endblock %}
